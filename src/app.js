@@ -26,7 +26,9 @@ const app = express();
 
 // Manejo de rutas para servir la aplicación React
 
-
+app.get('/', (req, res) => {
+    res.send('¡Servidor en funcionamiento!'); // Puedes personalizar este mensaje
+  });
 app.use(cors());
 
 
