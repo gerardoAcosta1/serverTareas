@@ -26,12 +26,9 @@ const app = express();
 
 // Manejo de rutas para servir la aplicación React
 
-app.use(express.static('./cliente/dist/'));
+
 app.use(cors());
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, './cliente/dist/', 'index.html'));
-});
 
 //utilizar json
 app.use(express.json());
