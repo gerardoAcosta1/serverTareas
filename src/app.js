@@ -1,20 +1,11 @@
-import  express  from "express";
-import path from 'path'
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+import express from "express";
 import cors from 'cors'
 import db from "./utils/dataBase.js";
 import todos from "./models/todos.model.js";
 
-
 const PORT = 3000;
 
 todos;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-
 db.authenticate()
     .then(res => console.log(res))
     .catch(err => console.log(err))
@@ -24,31 +15,29 @@ db.sync()
 
 const app = express();
 
-// Manejo de rutas para servir la aplicación React
-
-
 app.use(cors());
-
 
 //utilizar json
 app.use(express.json());
 
+app.get('/', (req, res) => {
+    res.send('¡Servidor en funcionamiento!');
+});
+
 app.get('/todos', async (req, res) => {
 
-    try{
+    try {
 
         const tareas = await todos.findAll();
-        
-        if(!tareas){
 
-            res.status(404).json({message: 'tarea not found'})
+        if (!tareas) {
+
+            res.status(404).json({ message: 'tarea not found' })
         }
 
         res.json(tareas);
 
-    }catch (err)
-
-    {
+    } catch (err) {
         res.status(201).json(err);
         console.log(err);
     }
@@ -56,92 +45,85 @@ app.get('/todos', async (req, res) => {
 
 app.get('/todos/:id', async (req, res) => {
 
-    try{
+    try {
 
         const tareaId = req.params.id;
 
         const tarea = await todos.findByPk(tareaId);
-    
-        if(!tarea){
-           return res.status(404).json({message: 'not found'});
+
+        if (!tarea) {
+            return res.status(404).json({ message: 'not found' });
         }
         res.json(tarea);
 
-    }catch (err)
-
-    {
-        res.status(201).json({err: 'ocurrió un error'});
+    } catch (err) {
+        res.status(201).json({ err: 'ocurrió un error' });
         console.log(err);
     }
-   
+
 })
 
 app.post('/todos/', async (req, res) => {
 
-    try{
+    try {
         const { title, description, completed } = req.body
 
-        const newTarea = await todos.create({title, description, completed});
+        const newTarea = await todos.create({ title, description, completed });
 
-        res.json({message: 'tarea agregada'})
+        res.json({ message: 'tarea agregada' })
 
-    }catch (err)
-
-    {
-        res.status(201).json({err: 'ocurrió un error'});
+    } catch (err) {
+        res.status(201).json({ err: 'ocurrió un error' });
         console.log(err);
     }
 })
 
 app.put('/todos/:id', async (req, res) => {
-    
-    try{
+
+    try {
 
         const tareaId = req.params.id
 
-        const {title, description, completed} = req.body
+        const { title, description, completed } = req.body
 
         const tarea = await todos.findByPk(tareaId)
 
-        if(!tarea){
+        if (!tarea) {
 
-            res.status(404).json({message: 'tarea not found'})
+            res.status(404).json({ message: 'tarea not found' })
         }
 
-        await todos.update({title, description, completed},{where: { id: tareaId }})
-        res.json({message: 'added'});
+        await todos.update({ title, description, completed }, { where: { id: tareaId } })
+        res.json({ message: 'added' });
 
-    }catch (err)
-    {
-        res.status(201).json({err: 'ocurrió un error'});
+    } catch (err) {
+        res.status(201).json({ err: 'ocurrió un error' });
         console.log(err);
     }
 })
 
 app.delete('/todos/:id', async (req, res) => {
 
-    try{
+    try {
         const tareaId = req.params.id
 
-        const {title, description, completed} = req.body
+        const { title, description, completed } = req.body
 
         const tarea = await todos.findByPk(tareaId)
-       
 
-        if(!tarea){
 
-            res.status(404).json({message: 'tarea not found'})
+        if (!tarea) {
+
+            res.status(404).json({ message: 'tarea not found' })
         }
 
         await tarea.destroy()
-        
-        res.json({message: 'work destroyed'})
-        
 
-    }catch (err)
+        res.json({ message: 'work destroyed' })
 
-    {
-        res.status(201).json({err: 'ocurrió un error'});
+
+    } catch (err) {
+        res.status(201).json({ err: 'ocurrió un error' });
         console.log(err);
     }
 
