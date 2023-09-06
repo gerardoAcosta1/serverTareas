@@ -16,6 +16,9 @@ db.sync()
 
 const app = express();
 
+// Manejo de rutas para servir la aplicación React
+
+
 app.use(cors());
 
 //utilizar json
