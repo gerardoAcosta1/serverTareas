@@ -2,8 +2,9 @@ import express from "express";
 import cors from 'cors'
 import db from "./utils/dataBase.js";
 import todos from "./models/todos.model.js";
+import "dotenv/config";
 
-const PORT = 3000;
+const PORT = process.env.PORT || 8000;
 
 todos;
 db.authenticate()
@@ -106,8 +107,6 @@ app.delete('/todos/:id', async (req, res) => {
 
     try {
         const tareaId = req.params.id
-
-        const { title, description, completed } = req.body
 
         const tarea = await todos.findByPk(tareaId)
 
