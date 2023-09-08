@@ -75,6 +75,7 @@ app.post('/todos/', async (req, res) => {
         const newTarea = await todos.create({ title, description, completed });
 
         res.json({ message: 'tarea agregada' })
+        res.redirect('/todos');
 
     } catch (err) {
         res.status(201).json({ err: 'ocurrió un error' });
@@ -99,6 +100,7 @@ app.put('/todos/:id', async (req, res) => {
 
         await todos.update({ title, description, completed }, { where: { id: tareaId } })
         res.json({ message: 'added' });
+        res.redirect('/todos');
 
     } catch (err) {
         res.status(201).json({ err: 'ocurrió un error' });
@@ -122,7 +124,7 @@ app.delete('/todos/:id', async (req, res) => {
         await tarea.destroy()
 
         res.json({ message: 'work destroyed' })
-
+        res.redirect('/todos');
 
     } catch (err) {
         res.status(201).json({ err: 'ocurrió un error' });
